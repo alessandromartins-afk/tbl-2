@@ -1,0 +1,134 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine("=== TBL POO 2 - EXCEÇÕES ===");
+        Console.WriteLine("1 - Validar idade");
+        Console.WriteLine("2 - Realizar divisão");
+        Console.WriteLine("3 - Retirar produto do estoque");
+        Console.Write("\nEscolha uma opção: ");
+
+        int opcao = int.Parse(Console.ReadLine());
+
+        try
+        {
+            switch (opcao)
+            {
+                case 1:
+                    TestarIdade();
+                    break;
+
+                case 2:
+                    TestarDivisao();
+                    break;
+
+                case 3:
+                    TestarEstoque();
+                    break;
+
+                default:
+                    Console.WriteLine("Opção inválida.");
+                    break;
+            }
+        }
+        catch (IdadeInvalidaException ex)
+        {
+            Console.WriteLine("Erro: " + ex.Message);
+        }
+        catch (DivisaoPorZeroException ex)
+        {
+            Console.WriteLine("Erro: " + ex.Message);
+        }
+        catch (EstoqueInsuficienteException ex)
+        {
+            Console.WriteLine("Erro: " + ex.Message);
+        }
+    }
+
+    static void TestarIdade()
+    {
+        Console.Write("Digite a idade: ");
+        int idade = int.Parse(Console.ReadLine());
+
+        if (idade < 0 || idade > 120)
+        {
+            throw new IdadeInvalidaException(
+                "A idade deve estar entre 0 e 120 anos."
+            );
+        }
+
+        Console.WriteLine("Idade válida. Cadastro realizado!");
+    }
+
+
+    static void TestarDivisao()
+    {
+        Console.Write("Digite o primeiro número: ");
+        double numero1 = double.Parse(Console.ReadLine());
+
+        Console.Write("Digite o segundo número: ");
+        double numero2 = double.Parse(Console.ReadLine());
+
+        if (numero2 == 0)
+        {
+            throw new DivisaoPorZeroException(
+                "Não é permitido realizar divisão por zero."
+            );
+        }
+
+        double resultado = numero1 / numero2;
+
+        Console.WriteLine("Resultado: " + resultado);
+    }
+
+    static void TestarEstoque()
+    {
+        int estoque = 10;
+
+        Console.WriteLine("Estoque disponível: " + estoque);
+        Console.Write("Digite a quantidade que deseja retirar: ");
+
+        int quantidade = int.Parse(Console.ReadLine());
+
+        if (quantidade > estoque)
+        {
+            throw new EstoqueInsuficienteException(
+                "Não existem produtos suficientes no estoque."
+            );
+        }
+
+        estoque -= quantidade;
+
+        Console.WriteLine("Retirada realizada com sucesso!");
+        Console.WriteLine("Estoque restante: " + estoque);
+    }
+}
+
+
+class IdadeInvalidaException : Exception
+{
+    public IdadeInvalidaException(string mensagem)
+        : base(mensagem)
+    {
+    }
+}
+
+
+class DivisaoPorZeroException : Exception
+{
+    public DivisaoPorZeroException(string mensagem)
+        : base(mensagem)
+    {
+    }
+}
+
+
+class EstoqueInsuficienteException : Exception
+{
+    public EstoqueInsuficienteException(string mensagem)
+        : base(mensagem)
+    {
+    }
+}
